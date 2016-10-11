@@ -60,6 +60,7 @@ class ShippingContainer(ShippingLogMixin):
         """
         if self.is_image is False:
             self.logger.info('Building Container {}'.format(self.name))
+            self.logger.info('Build Arguments {}'.format(self.buildargs))
             response = [
                 line for line in self.cli.build(
                     path=self.repo_dir,

@@ -52,7 +52,6 @@ class DrupalShippingContainer(ShippingContainer):
 
             if self.config.get('ShippingPier', 'deploy_env') in ['dev', 'stage']:
                 new_env_vars['MYSQL_HOSTNAME'] = self.project_name + '_mysql'
-                self.buildargs['DRUPAL_COMPOSER_DEV'] = 'dev'
         except:
             self.logger.error('Some configuration settings not found! {}'.format(self.name))
             sys.exit(3)
@@ -101,3 +100,8 @@ class DrupalShippingContainer(ShippingContainer):
     def test_deploy_drupal_tests(self):
         harbor_master = HarborMasterContainerSelfTest(self)
         harbor_master.run_tests()
+
+    def build(self):
+        if self.config.get('ShippingPier', 'deploy_env') in ['dev', 'stage']:
+            self.buildargs['COMPOSER_DEPLOY_DEV'] = 'dev'
+        super(DrupalShippingContainer, self).build()
