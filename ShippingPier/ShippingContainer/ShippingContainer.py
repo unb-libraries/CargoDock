@@ -10,6 +10,7 @@ class ShippingContainer(ShippingLogMixin):
         self.id = None
         self.is_image = False
         self.binds = []
+        self.buildargs = {}
         self.ports = []
         self.port_bindings = {}
         self.volumes = []
@@ -64,7 +65,8 @@ class ShippingContainer(ShippingLogMixin):
                     path=self.repo_dir,
                     rm=True,
                     pull=True,
-                    tag=self.image_string
+                    tag=self.image_string,
+                    buildargs=self.buildargs
                 )
             ]
             for response_line in response:

@@ -52,6 +52,7 @@ class DrupalShippingContainer(ShippingContainer):
 
             if self.config.get('ShippingPier', 'deploy_env') in ['dev', 'stage']:
                 new_env_vars['MYSQL_HOSTNAME'] = self.project_name + '_mysql'
+                self.buildargs['DRUPAL_COMPOSER_DEV'] = 'dev'
         except:
             self.logger.error('Some configuration settings not found! {}'.format(self.name))
             sys.exit(3)
