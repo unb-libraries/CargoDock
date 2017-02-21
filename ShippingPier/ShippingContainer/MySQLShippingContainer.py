@@ -15,6 +15,7 @@ class MySQLShippingContainer(ShippingContainer):
         self.setup_environment()
         self.id = self.cli.create_container(
             image=self.image_string,
+            command='mysqld --skip-name-resolve --max_allowed_packet=64M',
             name=self.name,
             ports=self.ports,
             host_config=self.cli.create_host_config(
