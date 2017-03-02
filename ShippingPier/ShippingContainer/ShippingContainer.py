@@ -11,6 +11,7 @@ class ShippingContainer(ShippingLogMixin):
         self.is_image = False
         self.binds = []
         self.buildargs = {}
+        self.buildfails = ['returned a non-zero code']
         self.ports = []
         self.port_bindings = {}
         self.volumes = []
@@ -72,7 +73,10 @@ class ShippingContainer(ShippingLogMixin):
             ]
             for response_line in response:
                 self.logger.info('Build Output : {}'.format(response_line))
-
+                for error_string in self.buildfails:
+                    if error_string.lower() in response_line.lower():
+                        self.logger.error('ERROR: Docker build failed. [{}]'.format(response_line))
+                        sys.exit(3)
 
     def check_details(self):
         """
