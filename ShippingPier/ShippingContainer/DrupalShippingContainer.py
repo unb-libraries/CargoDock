@@ -86,7 +86,7 @@ class DrupalShippingContainer(ShippingContainer):
 
     def test_deploy(self):
         self.test_deploy_web_reachable()
-        self.test_output_stderr_exists()
+        self.test_stderr()
         self.test_deploy_drupal_tests()
 
     def test_deploy_web_reachable(self):
@@ -102,9 +102,13 @@ class DrupalShippingContainer(ShippingContainer):
         harbor_master = HarborMasterContainerSelfTest(self)
         harbor_master.run_tests()
 
-    def test_output_stderr_exists(self):
+    def test_stderr(self):
         harbor_master = HarborMasterContainerSelfTest(self)
-        harbor_master.fail_stderr_logs()
+        harbor_master.strings_stderr_output(
+            [
+                'validating the config synchronization'
+            ]
+        )
 
     def build(self):
         if self.config.get('ShippingPier', 'deploy_env') in ['dev', 'stage']:

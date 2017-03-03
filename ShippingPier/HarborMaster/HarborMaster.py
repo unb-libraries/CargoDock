@@ -9,16 +9,15 @@ class HarborMaster(ShippingLogMixin):
         self.container = container
         self.logger.info('Creating Harbor Master for {}'.format(self.container.name))
 
-    #def fail_stderr_logs(self, string):
-    def fail_stderr_logs(self):
+    def strings_stderr_output(self, error_strings=[]):
         logs_stderr_output = self.container.cli.logs(
             container=self.container.id,
             stderr=True,
-            stdout=True
+            stdout=False
         )
         self.logger.info("{} Stderr : {}".format(self.container.name, logs_stderr_output))
 
-        #if string not in self.response.read():
-        #    self.logger.error("{} String '{}' Does Not Exist on Page, URI:{} Last Response:{}".format(self.container.name, string, self.url, self.status))
-        #    exit(5)
-        #self.logger.info("{} String '{}' Exists on Page! URI:{} Response:{}".format(self.container.name, string, self.url, self.status))
+        for error_string in error_strings:
+            if error_string in logs_stderr_output:
+                self.logger.error("{} String '{}' Exists in stderr, Failing.".format(self.container.name, error_string))
+                exit(5)
