@@ -31,12 +31,12 @@ class GantryCrane(ShippingLogMixin):
         container = globals()[container_type](name, details, self.cli, self.config)
         return container
 
-    def build_all(self):
+    def build_all(self, no_cache = False):
         """
         Add a container to this crane.
         """
         for container in self.containers:
-            container.build()
+            container.build(no_cache)
 
     def build_docker_uri(self):
         self.config.get('ShippingPier', 'docker_api_protocol') + '://'\
@@ -71,12 +71,12 @@ class GantryCrane(ShippingLogMixin):
             self.logger.info('Removing Docker Network {}'.format(self.project_name))
             self.cli.remove_network(net_id=self.project_name)
 
-    def deploy(self):
+    def deploy(self, no_cache = False):
         """
         Deploy and start the containers serviced by this crane.
         """
         self.create_network()
-        self.build_all()
+        self.build_all(no_cache)
         self.prepare_all()
         self.start_all()
         self.test_all()

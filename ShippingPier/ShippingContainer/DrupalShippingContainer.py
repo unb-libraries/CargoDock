@@ -110,7 +110,7 @@ class DrupalShippingContainer(ShippingContainer):
             ]
         )
 
-    def build(self):
+    def build(self, no_cache = False):
         if self.config.get('ShippingPier', 'deploy_env') in ['dev', 'stage']:
             self.buildargs['COMPOSER_DEPLOY_DEV'] = 'dev'
-        super(DrupalShippingContainer, self).build()
+        super(DrupalShippingContainer, self).build(no_cache)

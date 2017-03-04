@@ -6,6 +6,7 @@ from ShippingLogs.ShippingLogs import ShippingLogMixin
 # Import all crane types here.
 from GantryCrane.GantryCrane import GantryCrane
 
+import os
 import re
 import sys
 
@@ -19,6 +20,11 @@ class ShippingPier(ShippingLogMixin):
         self.init_logger()
         self.project_name = None
         self.deploy_env = self.config.get('ShippingPier', 'deploy_env')
+
+        if 'DOCKER_NO_CACHE' not in os.environ or os.environ['DOCKER_NO_CACHE'].strip() == '':
+            self.no_cache = False
+        else:
+            self.no_cache = True
 
     def add_crane(self, crane):
         """
@@ -54,7 +60,7 @@ class ShippingPier(ShippingLogMixin):
         Deploy the pier's application(s).
         """
         for crane in self.cranes:
-            crane.deploy()
+            crane.deploy(self.no_cache)
 
     def add_manifest(self, manifest):
         """

@@ -55,7 +55,7 @@ class ShippingContainer(ShippingLogMixin):
         """
         self.volumes.extend(volumes)
 
-    def build(self):
+    def build(self, no_cache = False):
         """
         Build the container from the Dockerfile.
         """
@@ -68,7 +68,8 @@ class ShippingContainer(ShippingLogMixin):
                     rm=True,
                     pull=True,
                     tag=self.image_string,
-                    buildargs=self.buildargs
+                    buildargs=self.buildargs,
+                    nocache=no_cache
                 )
             ]
             for response_line in response:
