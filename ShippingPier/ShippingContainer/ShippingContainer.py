@@ -1,6 +1,7 @@
 """
 A generic shipping container object intended to be extended. @see DrupalShippingContainer().
 """
+import re
 import sys
 from ShippingPier.ShippingLogs.ShippingLogs import ShippingLogMixin
 
@@ -73,6 +74,9 @@ class ShippingContainer(ShippingLogMixin):
                 )
             ]
             for response_line in response:
+                # Strip color codes.
+                re.sub("\033\[[0-9;]+m", "", response_line)
+
                 self.logger.info('Build Output : {}'.format(response_line))
                 for error_string in self.buildfails:
                     if error_string.lower() in response_line.lower():
