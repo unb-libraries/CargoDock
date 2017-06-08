@@ -55,11 +55,14 @@ vendor/bin/dockworker container:theme:build-all
 $(docker run -i -v ${HOME}/.aws:/home/aws/.aws unblibraries/aws-cli aws ecr get-login)
 docker build -t ${SERVICE_NAME}:${BUILD_BRANCH} .
 docker tag ${SERVICE_NAME}:${BUILD_BRANCH} ${AMAZON_ECR_URI}/${SERVICE_NAME}:${BUILD_BRANCH}
-IMAGE_SHA256_HASH=$(docker images --no-trunc ${AMAZON_ECR_URI}/${SERVICE_NAME}:${BUILD_BRANCH} --format "{{.ID}}")
 docker push ${AMAZON_ECR_URI}/${SERVICE_NAME}:${BUILD_BRANCH}
+IMAGE_SHA256_HASH=$(docker pull ${AMAZON_ECR_URI}/${SERVICE_NAME}:${BUILD_BRANCH} | grep 'Digest:' | awk '{ print $2 }')
 
 ## Deploy.
 ##
+# Notification.
+echo "SHA of ${AMAZON_ECR_URI}/${SERVICE_NAME}:${BUILD_BRANCH} appears to be ${IMAGE_SHA256_HASH}, deploying."
+
 # Update image hash to latest build.
 kubectl get deployment ${KUBE_DEPLOYMENT_NAME} --namespace=${BUILD_BRANCH} -o=yaml | sed "s|\(^\s*\)image: .*|\1image: $AMAZON_ECR_URI/$SERVICE_NAME@$IMAGE_SHA256_HASH|g" > /tmp/${KUBE_DEPLOYMENT_NAME}-new.yml
 
