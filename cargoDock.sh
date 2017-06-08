@@ -55,13 +55,13 @@ vendor/bin/dockworker container:theme:build-all
 $(docker run -i -v ${HOME}/.aws:/home/aws/.aws unblibraries/aws-cli aws ecr get-login)
 docker build -t ${SERVICE_NAME}:${BUILD_BRANCH} .
 docker tag ${SERVICE_NAME}:${BUILD_BRANCH} ${AMAZON_ECR_URI}/${SERVICE_NAME}:${BUILD_BRANCH}
-IMAGE_SHA256_HASH=$(docker images --no-trunc ${AMAZON_ECR_URI}/${IMAGE_NAME}:${BUILD_BRANCH} --format "{{.ID}}")
+IMAGE_SHA256_HASH=$(docker images --no-trunc ${AMAZON_ECR_URI}/${SERVICE_NAME}:${BUILD_BRANCH} --format "{{.ID}}")
 docker push ${AMAZON_ECR_URI}/${SERVICE_NAME}:${BUILD_BRANCH}
 
 ## Deploy.
 ##
 # Update image hash to latest build.
-kubectl get deployment ${KUBE_DEPLOYMENT_NAME} --namespace=${BUILD_BRANCH} -o=yaml | sed "s|\(^\s*\)image: .*|\1image: $AMAZON_ECR_URI/$IMAGE_NAME@sha256:$IMAGE_SHA256_HASH|g" > /tmp/${KUBE_DEPLOYMENT_NAME}-new.yml
+kubectl get deployment ${KUBE_DEPLOYMENT_NAME} --namespace=${BUILD_BRANCH} -o=yaml | sed "s|\(^\s*\)image: .*|\1image: $AMAZON_ECR_URI/$SERVICE_NAME@$IMAGE_SHA256_HASH|g" > /tmp/${KUBE_DEPLOYMENT_NAME}-new.yml
 
 # Apply updated deployment.
 kubectl apply -f /tmp/${KUBE_DEPLOYMENT_NAME}-new.yml --record --namespace=${BUILD_BRANCH}
