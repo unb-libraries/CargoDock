@@ -20,20 +20,14 @@
 AMAZON_ECR_URI="${AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com"
 KUBE_DEPLOYMENT_NAME=${SERVICE_NAME//./-}
 
-## Triage.
-##
-if [ -z "${BRANCH_NAME}" ]; then
-  if [ -z "${BRANCH}" ]; then
-    echo "Branch not set in Github ping or build parameter"
-    exit 1
-  else
-    BUILD_BRANCH="${BRANCH}"
-  fi
-else
-  BUILD_BRANCH="${BRANCH_NAME}"
+BUILD_BRANCH=$GIT_LOCAL_BRANCH
+BUILD_BRANCHES=(dev prod)
+
+if [[ ! ${BUILD_BRANCHES[*]} =~ "$BUILD_BRANCH" ]]; then
+    echo "Not building branch $BUILD_BRANCH"
+    exit 0
 fi
 
-BUILD_BRANCH=$(echo ${BUILD_BRANCH} | sed 's|origin/||g')
 echo "Building Branch ${BUILD_BRANCH}"
 
 ## Build.
