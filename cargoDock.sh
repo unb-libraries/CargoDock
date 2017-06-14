@@ -20,7 +20,7 @@
 AMAZON_ECR_URI="${AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com"
 KUBE_DEPLOYMENT_NAME=${SERVICE_NAME//./-}
 
-BUILD_BRANCH="${BRANCH:-GIT_BRANCH}"
+BUILD_BRANCH="${BRANCH:-$GIT_BRANCH}"
 BUILD_BRANCH=$(echo ${BUILD_BRANCH} | sed 's|origin/||g')
 
 BUILD_BRANCHES=(dev prod)
