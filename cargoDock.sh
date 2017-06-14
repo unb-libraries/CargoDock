@@ -16,6 +16,7 @@
 #   DOCKER_UPSTREAM_IMAGE
 #   SERVICE_NAME
 #
+set -e
 
 AMAZON_ECR_URI="${AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com"
 KUBE_DEPLOYMENT_NAME=${SERVICE_NAME//./-}
