@@ -50,7 +50,7 @@ vendor/bin/dockworker container:theme:build-all
 
 # Build the image and push it to the EC2 registry.
 $(docker run -i -v ${HOME}/.aws:/home/aws/.aws unblibraries/aws-cli aws ecr get-login)
-docker build -t ${SERVICE_NAME}:${BUILD_BRANCH} .
+docker build --no-cache -t ${SERVICE_NAME}:${BUILD_BRANCH} .
 docker tag ${SERVICE_NAME}:${BUILD_BRANCH} ${AMAZON_ECR_URI}/${SERVICE_NAME}:${BUILD_BRANCH}
 docker push ${AMAZON_ECR_URI}/${SERVICE_NAME}:${BUILD_BRANCH}
 IMAGE_SHA256_HASH=$(docker pull ${AMAZON_ECR_URI}/${SERVICE_NAME}:${BUILD_BRANCH} | grep 'Digest:' | awk '{ print $2 }')
