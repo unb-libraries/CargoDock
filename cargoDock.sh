@@ -24,7 +24,7 @@ KUBE_DEPLOYMENT_NAME=${SERVICE_NAME//./-}
 BUILD_BRANCH="${BRANCH:-$GIT_BRANCH}"
 BUILD_BRANCH=$(echo ${BUILD_BRANCH} | sed 's|origin/||g')
 
-BUILD_BRANCHES=(dev prod)
+BUILD_BRANCHES=(dev prod systems)
 
 if [[ ! ${BUILD_BRANCHES[*]} =~ "$BUILD_BRANCH" ]]; then
     echo "Not building branch $BUILD_BRANCH"
@@ -44,9 +44,18 @@ git clean -f
 # Pull the latest version of the upstream image.
 docker pull ${DOCKER_UPSTREAM_IMAGE}
 
-# Build the theme(s).
-composer install
-vendor/bin/dockworker container:theme:build-all
+if [ -e composer.json ]; then
+  # Remove any remnants of previous composer installs.
+  rm -rf vendor
+  rm -rf composer.lock
+
+  # Install dependencies.
+  composer install
+  if [ -e vendor/bin/dockworker ]; then
+    # Build the theme(s).
+    vendor/bin/dockworker container:theme:build-all
+  fi
+fi
 
 # Build the image and push it to the EC2 registry.
 $(docker run -i -v ${HOME}/.aws:/home/aws/.aws unblibraries/aws-cli aws ecr get-login)
