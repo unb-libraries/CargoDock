@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Build and deploy Drupal docker containers to CoreOS endpoints using Fleet
+# Build and deploy Drupal docker containers to Kubernetes nodes
 # and Amazon Simple Container Registry as a storage medium.
 #
 # There are three primary functions that could  be broken out someday into
