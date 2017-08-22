@@ -77,3 +77,11 @@ kubectl apply -f /tmp/${KUBE_DEPLOYMENT_NAME}-new.yml --record --namespace=${BUI
 
 # Remove temporary job file.
 rm -f /tmp/${KUBE_DEPLOYMENT_NAME}-new.yml
+
+# Remove non-current images
+IMAGE_JSON=$(docker run -i -v ${HOME}/.aws:/home/aws/.aws unblibraries/aws-cli aws ecr list-images --repository-name=$SERVICE_NAME --filter=tagStatus=UNTAGGED)
+IMAGES_TO_DEL=$(echo "$IMAGE_JSON" | grep 'imageDigest' | awk '{ print $2 }')
+for IMAGE in $IMAGES_TO_DEL; do
+  echo "Deleting Image $IMAGE"
+  docker run -i -v ${HOME}/.aws:/home/aws/.aws unblibraries/aws-cli aws ecr batch-delete-image --repository-name=$SERVICE_NAME --image-ids=imageDigest=$IMAGE
+done
