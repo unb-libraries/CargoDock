@@ -57,20 +57,18 @@ if [ -e composer.json ]; then
   fi
 fi
 
+# Set tagStatus
+BUILD_DATE=`date '+%Y%m%d%H%M'`
+IMAGE_TAG="$BUILD_BRANCH-$BUILD_DATE"
+
 # Build the image and push it to the EC2 registry.
 $(docker run -i -v ${HOME}/.aws:/home/aws/.aws unblibraries/aws-cli aws ecr get-login)
-docker build --no-cache -t ${SERVICE_NAME}:${BUILD_BRANCH} .
-docker tag ${SERVICE_NAME}:${BUILD_BRANCH} ${AMAZON_ECR_URI}/${SERVICE_NAME}:${BUILD_BRANCH}
-docker push ${AMAZON_ECR_URI}/${SERVICE_NAME}:${BUILD_BRANCH}
-IMAGE_SHA256_HASH=$(docker pull ${AMAZON_ECR_URI}/${SERVICE_NAME}:${BUILD_BRANCH} | grep 'Digest:' | awk '{ print $2 }')
-
-## Deploy.
-##
-# Notification.
-echo "\n\nSHA of ${AMAZON_ECR_URI}/${SERVICE_NAME}:${BUILD_BRANCH} appears to be ${IMAGE_SHA256_HASH}, setting new image in kube.\n\n"
+docker build --no-cache -t ${SERVICE_NAME}:${IMAGE_TAG} .
+docker tag ${SERVICE_NAME}:${IMAGE_TAG} ${AMAZON_ECR_URI}/${SERVICE_NAME}:${IMAGE_TAG}
+docker push ${AMAZON_ECR_URI}/${SERVICE_NAME}:${IMAGE_TAG}
 
 # Update image hash to latest build.
-kubectl set image --record deployment/${KUBE_DEPLOYMENT_NAME} ${KUBE_DEPLOYMENT_NAME}=$AMAZON_ECR_URI/$SERVICE_NAME@$IMAGE_SHA256_HASH --namespace=${BUILD_BRANCH}
+kubectl set image --record deployment/${KUBE_DEPLOYMENT_NAME} ${KUBE_DEPLOYMENT_NAME}=$AMAZON_ECR_URI/$SERVICE_NAME:$IMAGE_TAG --namespace=${BUILD_BRANCH}
 
 # Remove non-current images
 IMAGE_JSON=$(docker run -i -v ${HOME}/.aws:/home/aws/.aws unblibraries/aws-cli aws ecr list-images --repository-name=$SERVICE_NAME --filter=tagStatus=UNTAGGED)
