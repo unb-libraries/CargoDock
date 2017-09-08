@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Build and deploy Drupal docker containers to Kubernetes nodes
+# Build and deploy Drupal docker containers to CoreOS endpoints using Fleet
 # and Amazon Simple Container Registry as a storage medium.
 #
 # There are three primary functions that could  be broken out someday into
@@ -67,16 +67,10 @@ IMAGE_SHA256_HASH=$(docker pull ${AMAZON_ECR_URI}/${SERVICE_NAME}:${BUILD_BRANCH
 ## Deploy.
 ##
 # Notification.
-echo "\n\nSHA of ${AMAZON_ECR_URI}/${SERVICE_NAME}:${BUILD_BRANCH} appears to be ${IMAGE_SHA256_HASH}, deploying.\n\n"
+echo "\n\nSHA of ${AMAZON_ECR_URI}/${SERVICE_NAME}:${BUILD_BRANCH} appears to be ${IMAGE_SHA256_HASH}, setting new image in kube.\n\n"
 
 # Update image hash to latest build.
-kubectl get deployment ${KUBE_DEPLOYMENT_NAME} --namespace=${BUILD_BRANCH} -o=yaml | sed "s|\(^\s*\)image: .*|\1image: $AMAZON_ECR_URI/$SERVICE_NAME@$IMAGE_SHA256_HASH|g" > /tmp/${KUBE_DEPLOYMENT_NAME}-new.yml
-
-# Apply updated deployment.
-kubectl apply -f /tmp/${KUBE_DEPLOYMENT_NAME}-new.yml --record --namespace=${BUILD_BRANCH}
-
-# Remove temporary job file.
-rm -f /tmp/${KUBE_DEPLOYMENT_NAME}-new.yml
+kubectl set image deployment/${KUBE_DEPLOYMENT_NAME} ${KUBE_DEPLOYMENT_NAME}=$AMAZON_ECR_URI/$SERVICE_NAME@$IMAGE_SHA256_HASH --namespace=${BUILD_BRANCH}
 
 # Remove non-current images
 IMAGE_JSON=$(docker run -i -v ${HOME}/.aws:/home/aws/.aws unblibraries/aws-cli aws ecr list-images --repository-name=$SERVICE_NAME --filter=tagStatus=UNTAGGED)
