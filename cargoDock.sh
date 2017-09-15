@@ -70,6 +70,9 @@ docker build --no-cache -t ${SERVICE_NAME}:${IMAGE_TAG} .
 echo "Applying Tags and Pushing to ECR..."
 docker tag ${SERVICE_NAME}:${IMAGE_TAG} ${AMAZON_ECR_URI}/${SERVICE_NAME}:${IMAGE_TAG}
 docker push ${AMAZON_ECR_URI}/${SERVICE_NAME}:${IMAGE_TAG}
+
+# Also Tag default build_branch.
+docker build -t ${SERVICE_NAME}:${BUILD_BRANCH} .
 docker tag ${SERVICE_NAME}:${BUILD_BRANCH} ${AMAZON_ECR_URI}/${SERVICE_NAME}:${BUILD_BRANCH}
 docker push ${AMAZON_ECR_URI}/${SERVICE_NAME}:${BUILD_BRANCH}
 
