@@ -17,6 +17,7 @@
 #   SERVICE_NAME
 #
 set -e
+SCRIPT_DIR=$(dirname $0)
 
 AMAZON_ECR_URI="${AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com"
 KUBE_DEPLOYMENT_NAME=${SERVICE_NAME//./-}
@@ -58,22 +59,32 @@ if [ -e composer.json ]; then
 fi
 
 # Set tagStatus
-BUILD_DATE=`date '+%Y%m%d%H%M'`
+BUILD_DATE=$(date '+%Y%m%d%H%M')
 IMAGE_TAG="$BUILD_BRANCH-$BUILD_DATE"
 
 # Build the image and push it to the EC2 registry.
+echo "Building Image Locally..."
 $(docker run -i -v ${HOME}/.aws:/home/aws/.aws unblibraries/aws-cli aws ecr get-login)
 docker build --no-cache -t ${SERVICE_NAME}:${IMAGE_TAG} .
+
+echo "Applying Tags and Pushing to ECR..."
 docker tag ${SERVICE_NAME}:${IMAGE_TAG} ${AMAZON_ECR_URI}/${SERVICE_NAME}:${IMAGE_TAG}
 docker push ${AMAZON_ECR_URI}/${SERVICE_NAME}:${IMAGE_TAG}
+docker tag ${SERVICE_NAME}:${BUILD_BRANCH} ${AMAZON_ECR_URI}/${SERVICE_NAME}:${BUILD_BRANCH}
+docker push ${AMAZON_ECR_URI}/${SERVICE_NAME}:${BUILD_BRANCH}
 
 # Update image hash to latest build.
+echo "Updating Image in Kubernetes..."
 kubectl set image --record deployment/${KUBE_DEPLOYMENT_NAME} ${KUBE_DEPLOYMENT_NAME}=$AMAZON_ECR_URI/$SERVICE_NAME:$IMAGE_TAG --namespace=${BUILD_BRANCH}
 
 # Remove non-current images
-IMAGE_JSON=$(docker run -i -v ${HOME}/.aws:/home/aws/.aws unblibraries/aws-cli aws ecr list-images --repository-name=$SERVICE_NAME --filter=tagStatus=UNTAGGED)
-IMAGES_TO_DEL=$(echo "$IMAGE_JSON" | grep 'imageDigest' | awk '{ print $2 }')
-for IMAGE in $IMAGES_TO_DEL; do
-  echo "Deleting Image $IMAGE"
-  docker run -i -v ${HOME}/.aws:/home/aws/.aws unblibraries/aws-cli aws ecr batch-delete-image --repository-name=$SERVICE_NAME --image-ids=imageDigest=$IMAGE
-done
+echo "Cleaning Up Old Images in ECR"
+IMAGE_JSON=$(docker run -i -v ${HOME}/.aws:/home/aws/.aws unblibraries/aws-cli aws ecr list-images --repository-name=$SERVICE_NAME)
+IMAGES_TO_DEL=$(echo "$IMAGE_JSON" | python $SCRIPT_DIR/getOldImages.py)
+
+while read -r IMAGE; do
+  IMAGE_DATE=$(echo $IMAGE | cut -f1 -d\|)
+  IMAGE_HASH=$(echo $IMAGE | cut -f2 -d\|)
+  echo "Deleting Image From $IMAGE_DATE - $IMAGE_HASH"
+  docker run -i -v ${HOME}/.aws:/home/aws/.aws unblibraries/aws-cli aws ecr batch-delete-image --repository-name=$SERVICE_NAME --image-ids=imageDigest=$IMAGE_HASH
+done <<< "$IMAGES_TO_DEL"
