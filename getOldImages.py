@@ -1,6 +1,12 @@
 import json
 import sys
+from collections import OrderedDict
 from datetime import timedelta, datetime
+
+def sortdict(d):
+    for key in sorted(d): yield d[key]
+
+images = {}
 
 for repo_image in json.load(sys.stdin)["imageIds"]:
   image_age = 0
@@ -9,7 +15,13 @@ for repo_image in json.load(sys.stdin)["imageIds"]:
     if '-' in tag:
       branch, date = tag.split('-')
       dt = datetime.strptime(date,'%Y%m%d%H%M%S')
-      if dt < datetime.now() + timedelta(days = -3):
-        print str(dt) + '|' + repo_image['imageDigest']
+      images[dt] = repo_image['imageDigest']
   except KeyError:
     pass
+
+all_dated_images = OrderedDict(sorted(images.items(), key=lambda t: t[0]))
+images_to_remove = list(all_dated_images.items())[:-3]
+
+for image_to_remove in images_to_remove:
+  image_date, image_sha = image_to_remove
+  print str(image_date) + '|' + image_sha
