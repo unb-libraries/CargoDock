@@ -19,6 +19,7 @@
 set -e
 SCRIPT_DIR=$(dirname $0)
 
+ECR_REGION='us-east-1'
 AMAZON_ECR_URI="${AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com"
 KUBE_DEPLOYMENT_NAME=${SERVICE_NAME//./-}
 
@@ -82,14 +83,19 @@ kubectl set image --record deployment/${KUBE_DEPLOYMENT_NAME} ${KUBE_DEPLOYMENT_
 
 # Remove non-current images
 echo "Cleaning Up Old Images in ECR"
-IMAGE_JSON=$(docker run -i -v ${HOME}/.aws:/home/aws/.aws unblibraries/aws-cli aws ecr list-images --repository-name=$SERVICE_NAME)
+IMAGE_JSON=$(docker run -i -v ${HOME}/.aws:/home/aws/.aws unblibraries/aws-cli aws ecr list-images --repository-name=$SERVICE_NAME --region=$ECR_REGION)
 IMAGES_TO_DEL=$(echo "$IMAGE_JSON" | python $SCRIPT_DIR/getOldImages.py $BUILD_BRANCH)
 echo "$IMAGES_TO_DEL"
 
-while read -r IMAGE; do
-  IMAGE_DATE=$(echo $IMAGE | cut -f1 -d\|)
-  IMAGE_HASH=$(echo $IMAGE | cut -f2 -d\|)
-  echo "Deleting Image From $IMAGE_DATE - $IMAGE_HASH"
-  docker run -v ${HOME}/.aws:/home/aws/.aws unblibraries/aws-cli aws ecr batch-delete-image --repository-name=$SERVICE_NAME --image-ids=imageDigest=$IMAGE_HASH
-done <<< "$IMAGES_TO_DEL"
+if [ ! -z "${IMAGES_TO_DEL// }" ]; then
+  while read -r IMAGE; do
+    echo "Deleting!"
+    IMAGE_DATE=$(echo $IMAGE | cut -f1 -d\|)
+    IMAGE_HASH=$(echo $IMAGE | cut -f2 -d\|)
+    echo "Deleting Image From $IMAGE_DATE - $IMAGE_HASH"
+    # docker run -v ${HOME}/.aws:/home/aws/.aws unblibraries/aws-cli aws ecr batch-delete-image --repository-name=$SERVICE_NAME --region=$ECR_REGION --image-ids=imageDigest=$IMAGE_HASH
+  done <<< "$IMAGES_TO_DEL"
+else
+  echo "No images to clean up!"
+fi
 
