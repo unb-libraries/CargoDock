@@ -81,6 +81,10 @@ docker push ${AMAZON_ECR_URI}/${SERVICE_NAME}:${BUILD_BRANCH}
 echo "Updating Image in Kubernetes..."
 kubectl set image --record deployment/${KUBE_DEPLOYMENT_NAME} ${KUBE_DEPLOYMENT_NAME}=$AMAZON_ECR_URI/$SERVICE_NAME:$IMAGE_TAG --namespace=${BUILD_BRANCH}
 
+# Update image hash to latest build.
+echo "Updating Image in Kubernetes..."
+kubectl set image --record deployment/${KUBE_DEPLOYMENT_NAME} ${KUBE_DEPLOYMENT_NAME}=$AMAZON_ECR_URI/$SERVICE_NAME:$IMAGE_TAG --namespace=${BUILD_BRANCH}
+
 # Remove non-current images
 echo "Cleaning Up Old Images in ECR"
 IMAGE_JSON=$(docker run -i -v ${HOME}/.aws:/home/aws/.aws unblibraries/aws-cli aws ecr list-images --repository-name=$SERVICE_NAME --region=$ECR_REGION)
@@ -89,13 +93,11 @@ echo "$IMAGES_TO_DEL"
 
 if [ ! -z "${IMAGES_TO_DEL// }" ]; then
   while read -r IMAGE; do
-    echo "Deleting!"
     IMAGE_DATE=$(echo $IMAGE | cut -f1 -d\|)
     IMAGE_HASH=$(echo $IMAGE | cut -f2 -d\|)
     echo "Deleting Image From $IMAGE_DATE - $IMAGE_HASH"
-    # docker run -v ${HOME}/.aws:/home/aws/.aws unblibraries/aws-cli aws ecr batch-delete-image --repository-name=$SERVICE_NAME --region=$ECR_REGION --image-ids=imageDigest=$IMAGE_HASH
+    docker run -v ${HOME}/.aws:/home/aws/.aws unblibraries/aws-cli aws ecr batch-delete-image --repository-name=$SERVICE_NAME --region=$ECR_REGION --image-ids=imageDigest=$IMAGE_HASH
   done <<< "$IMAGES_TO_DEL"
 else
   echo "No images to clean up!"
 fi
-
