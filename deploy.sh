@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Build and deploy Drupal docker containers to CoreOS endpoints using kubectl
+# Build and deploy Drupal docker containers to CoreOS endpoints using Fleet
 # and Amazon Simple Container Registry as a storage medium.
 #
 # There are three primary functions that could  be broken out someday into
@@ -89,11 +89,10 @@ echo "$IMAGES_TO_DEL"
 
 if [ ! -z "${IMAGES_TO_DEL// }" ]; then
   while read -r IMAGE; do
-    echo "Deleting!"
     IMAGE_DATE=$(echo $IMAGE | cut -f1 -d\|)
     IMAGE_HASH=$(echo $IMAGE | cut -f2 -d\|)
     echo "Deleting Image From $IMAGE_DATE - $IMAGE_HASH"
-    # docker run -v ${HOME}/.aws:/home/aws/.aws unblibraries/aws-cli aws ecr batch-delete-image --repository-name=$SERVICE_NAME --region=$ECR_REGION --image-ids=imageDigest=$IMAGE_HASH
+    docker run -v ${HOME}/.aws:/home/aws/.aws unblibraries/aws-cli aws ecr batch-delete-image --repository-name=$SERVICE_NAME --region=$ECR_REGION --image-ids=imageDigest=$IMAGE_HASH
   done <<< "$IMAGES_TO_DEL"
 else
   echo "No images to clean up!"
