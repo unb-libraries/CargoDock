@@ -81,10 +81,6 @@ docker push ${AMAZON_ECR_URI}/${SERVICE_NAME}:${BUILD_BRANCH}
 echo "Updating Image in Kubernetes..."
 kubectl set image --record deployment/${KUBE_DEPLOYMENT_NAME} ${KUBE_DEPLOYMENT_NAME}=$AMAZON_ECR_URI/$SERVICE_NAME:$IMAGE_TAG --namespace=${BUILD_BRANCH}
 
-# Update image hash to latest build.
-echo "Updating Image in Kubernetes..."
-kubectl set image --record deployment/${KUBE_DEPLOYMENT_NAME} ${KUBE_DEPLOYMENT_NAME}=$AMAZON_ECR_URI/$SERVICE_NAME:$IMAGE_TAG --namespace=${BUILD_BRANCH}
-
 # Remove non-current images
 echo "Cleaning Up Old Images in ECR"
 IMAGE_JSON=$(docker run -i -v ${HOME}/.aws:/home/aws/.aws unblibraries/aws-cli aws ecr list-images --repository-name=$SERVICE_NAME --region=$ECR_REGION)
