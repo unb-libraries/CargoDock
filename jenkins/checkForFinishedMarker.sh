@@ -8,11 +8,10 @@ KUBE_DEPLOYMENT_NAME=$(echo $SERVICE_NAME | sed 's/\./-/g')
 POD_NAME=$(kubectl get pods --namespace=$BRANCH --sort-by=.status.startTime -l tier=$KUBE_DEPLOYMENT_NAME --no-headers | tac | awk '{ print $1 }' | head -n 1)
 
 echo "Checking for pod finished marker in $POD_NAME..."
-POD_LOGS=$(kubectl logs $POD_NAME --namespace=$BRANCH)
-LOWER_POD_LOGS=${POD_LOGS,,}
-
 FINISHED_RETRY_COUNT=0
 until [ ${FINISHED_RETRY_COUNT} -ge ${MAX_FINISHED_RETRIES} ]; do
+  POD_LOGS=$(kubectl logs $POD_NAME --namespace=$BRANCH)
+  LOWER_POD_LOGS=${POD_LOGS,,}
   POD_STATUS=$(kubectl describe pod $POD_NAME --namespace=$BRANCH | grep 'Status:' | awk '{ print $2 }')
   if [[ $LOWER_POD_LOGS == *"$DEPLOYMENT_FINISHED_MARKER"* ]]; then
     echo "Finished Marker Found..."
@@ -26,5 +25,6 @@ done
 
 if [ ${FINISHED_RETRY_COUNT} -ge ${MAX_FINISHED_RETRIES} ]; then
   echo "${POD_NAME} pod did not log the finished marker ${DEPLOYMENT_FINISHED_MARKER} after ${MAX_FINISHED_RETRIES} attempts!"
+  echo "${POD_LOGS}"
   exit 1
 fi
