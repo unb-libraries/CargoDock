@@ -10,7 +10,7 @@ if [ -f ./tests/backstop/$BRANCH/backstop.json ]; then
   echo "Running Tests"
 
   KUBE_DEPLOYMENT_NAME=$(echo $SERVICE_NAME | sed 's/\./-/g')
-  POD_NAME=$(kubectl get pods --namespace=$BRANCH -l tier=$KUBE_DEPLOYMENT_NAME | grep Running | awk '{ print $1 }' | head -n 1)
+  POD_NAME=$(kubectl get pods --namespace=$BRANCH --sort-by=.status.startTime -l tier=$KUBE_DEPLOYMENT_NAME --no-headers | tac | awk '{ print $1 }' | head -n 1)
   DEV_IP=$(kubectl exec $POD_NAME --namespace=$BRANCH curl ipinfo.io/ip)
   docker run --rm --add-host dev-$SERVICE_NAME:$DEV_IP -v $(pwd)/tests/backstop/$BRANCH:/src docksal/backstopjs test
 
