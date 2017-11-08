@@ -9,7 +9,7 @@ echo "Checking if pod is running..."
 until [ ${CONNECT_RETRY_COUNT} -ge ${MAX_CONNECT_RETRIES} ]
 do
   POD_STATUS=$(kubectl describe pod $KUBE_DEPLOYMENT_NAME --namespace=$BRANCH | grep 'Status:' | awk '{ print $2 }')
-  if [ $POD_STATUS = "Running" ]; then
+  if [[ "$POD_STATUS" == "Running" ]]; then
     echo "Pod Running..."
     break
   else
