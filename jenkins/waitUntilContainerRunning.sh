@@ -4,6 +4,8 @@
 MAX_CONNECT_RETRIES=5
 CONNECT_RETRY_INTERVAL=15
 
+KUBE_DEPLOYMENT_NAME=$(echo $SERVICE_NAME | sed 's/\./-/g')
+
 CONNECT_RETRY_COUNT=0
 echo "Checking if pod is running..."
 until [ ${CONNECT_RETRY_COUNT} -ge ${MAX_CONNECT_RETRIES} ]; do
