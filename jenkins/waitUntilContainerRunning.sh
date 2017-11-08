@@ -8,7 +8,7 @@ CONNECT_RETRY_INTERVAL=15
 echo "Checking if pod is running..."
 until [ ${CONNECT_RETRY_COUNT} -ge ${MAX_CONNECT_RETRIES} ]
 do
-  POD_STATUS=$(describe pod $KUBE_DEPLOYMENT_NAME --namespace=$BRANCH | grep 'Status:' | awk '{ print $2 }')
+  POD_STATUS=$(kubectl describe pod $KUBE_DEPLOYMENT_NAME --namespace=$BRANCH | grep 'Status:' | awk '{ print $2 }')
   if [ $POD_STATUS = "Running" ]; then
     echo "Pod Running..."
     break
