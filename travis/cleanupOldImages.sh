@@ -15,7 +15,7 @@ if [[ $DEPLOY_BRANCHES =~ (^|,)"$TRAVIS_BRANCH"(,|$) ]]; then
   # List non-current images
   echo "Cleaning Up Old Images in ECR"
   IMAGE_JSON=$(aws ecr list-images --repository-name=$SERVICE_NAME --region=$AMAZON_ECR_REGION)
-  IMAGES_TO_DEL=$(echo "$IMAGE_JSON" | python "$SCRIPT_DIR/filterOldImages.py" -b $TRAVIS_BRANCH -n $OLD_IMAGES_TO_KEEP)
+  IMAGES_TO_DEL=$(echo "$IMAGE_JSON" | python "$SCRIPT_DIR/../aws/filterOldImages.py" -b $TRAVIS_BRANCH -n $OLD_IMAGES_TO_KEEP)
 
   # Remove non-current images
   if [ ! -z "${IMAGES_TO_DEL// }" ]; then
