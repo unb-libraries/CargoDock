@@ -4,7 +4,7 @@ set -euo pipefail
 
 # Test the connection
 function testNginxPage() {
-  curl -I --fail http://127.0.0.1:80/user
+  curl -I --fail "http://127.0.0.1:$SERVICE_DEPLOY_PORT$SERVICE_TEST_UP_URI"
   return $?
 }
 
