@@ -1,2 +1,5 @@
 #!/usr/bin/env sh
-rm -rf ~/.composer/cache
+# Clear composer cache
+if [ "$COMPOSER_CLEAR_CACHE" != "FALSE" ]; then
+  rm -rf /root/.composer/cache
+fi

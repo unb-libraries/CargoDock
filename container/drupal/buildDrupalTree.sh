@@ -20,25 +20,8 @@ mv ScriptHandler.php scripts/composer/
 echo "Building - 'composer install --prefer-dist --${DRUPAL_COMPOSER_DEV}'"
 composer install --no-ansi --prefer-dist --${DRUPAL_COMPOSER_DEV}
 
-# Check if drush install version matches upstream
-if [ ! -d "/opt/drush/$DRUSH_INSTALL_VERSION" ]; then
-  # Remove upstream version.
-  rm -rf /opt/drush
-  rm -rf /usr/bin/drush*
-
-  # Install new version.
-  echo "Installing Drush $DRUSH_INSTALL_VERSION"
-  cd /app
-  COMPOSER_HOME=/opt/drush COMPOSER_BIN_DIR=/usr/bin COMPOSER_VENDOR_DIR=/opt/drush/$DRUSH_INSTALL_VERSION composer require drush/drush:$DRUSH_INSTALL_VERSION --no-ansi --prefer-dist
-  mv /usr/bin/drush.php /usr/bin/drush
-  cd /opt/drush/$DRUSH_INSTALL_VERSION/drush/drush
-  composer update
-fi
-
-# Remove composer cache
-if [ "$COMPOSER_CLEAR_CACHE" != "FALSE" ]; then
-  rm -rf /root/.composer/cache
-fi
+# Install Drush globally.
+ln -s ${DRUPAL_BUILD_TMPROOT}/vendor/bin/drush /usr/bin/drush
 
 # Make drupal console available.
 ln -s ${DRUPAL_BUILD_TMPROOT}/vendor/bin/drupal /usr/bin/drupal
