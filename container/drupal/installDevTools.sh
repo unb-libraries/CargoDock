@@ -8,6 +8,7 @@ if [ "$DRUPAL_COMPOSER_DEV" == "dev" ]; then
   ## Testing Tools
   # Behat.
   cd ${DRUPAL_TESTING_ROOT}/behat
+  rm -rf vendor composer.lock
   composer install --prefer-dist
 
   # Copy default services
