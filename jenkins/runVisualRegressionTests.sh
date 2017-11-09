@@ -12,7 +12,7 @@ if [ -f ./tests/backstop/$BRANCH/backstop.json ]; then
   KUBE_DEPLOYMENT_NAME=$(echo $SERVICE_NAME | sed 's/\./-/g')
   POD_NAME=$(kubectl get pods --namespace=$BRANCH --sort-by=.status.startTime -l tier=$KUBE_DEPLOYMENT_NAME --no-headers | tac | awk '{ print $1 }' | head -n 1)
   DEV_IP=$(kubectl exec $POD_NAME --namespace=$BRANCH curl ipinfo.io/ip)
-  docker run --rm --add-host dev-$SERVICE_NAME:$DEV_IP -v $(pwd)/tests/backstop/$BRANCH:/src docksal/backstopjs test
+  docker run --rm --shm-size 512m --add-host dev-$SERVICE_NAME:$DEV_IP -v $(pwd)/tests/backstop/$BRANCH:/src docksal/backstopjs test
 
   TEST_RETURN_CODE=$?
   if [ $TEST_RETURN_CODE != 0 ]; then
