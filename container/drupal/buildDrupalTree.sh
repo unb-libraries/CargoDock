@@ -21,9 +21,11 @@ echo "Building - 'composer install --prefer-dist --${DRUPAL_COMPOSER_DEV}'"
 composer install --no-ansi --prefer-dist --${DRUPAL_COMPOSER_DEV}
 
 # Install Drush globally.
+rm -f /usr/bin/drush
 ln -s ${DRUPAL_BUILD_TMPROOT}/vendor/bin/drush /usr/bin/drush
 
 # Make drupal console available.
+rm -f /usr/bin/drupal
 ln -s ${DRUPAL_BUILD_TMPROOT}/vendor/bin/drupal /usr/bin/drupal
 
 # Move profile from repo to build root.
