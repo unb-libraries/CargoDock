@@ -9,7 +9,7 @@ if [ "$DRUPAL_COMPOSER_DEV" == "dev" ]; then
   # Behat.
   cd ${DRUPAL_TESTING_ROOT}/behat
   rm -rf vendor composer.lock
-  composer install --prefer-dist
+  composer install --verbose -vvv --profile --no-interaction --prefer-dist
 
   # Copy default services
   cp ${DRUPAL_BUILD_TMPROOT}/sites/default/default.services.yml ${DRUPAL_BUILD_TMPROOT}/sites/default/services.yml
