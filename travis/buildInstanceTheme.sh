@@ -10,7 +10,7 @@ if [[ $DEPLOY_BRANCHES =~ (^|,)"$TRAVIS_BRANCH"(,|$) ]]; then
     rm -rf composer.lock
 
     # Install dependencies.
-    composer install
+    composer install --prefer-dist --verbose -vvv --profile --no-interaction
     if [ -e vendor/bin/dockworker ]; then
       # Build the theme(s).
       echo "Building theme using dockworker."
