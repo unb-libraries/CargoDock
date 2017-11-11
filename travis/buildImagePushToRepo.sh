@@ -18,7 +18,7 @@ if [[ $DEPLOY_BRANCHES =~ (^|,)"$TRAVIS_BRANCH"(,|$) ]]; then
 
   # Build the image and push it to the EC2 registry.
   echo "Building Image For $IMAGE_TAG..."
-  docker build --cache-from ${CACHE_IMAGE} -t ${SERVICE_NAME}:${IMAGE_TAG} -t ${SERVICE_NAME}:${TRAVIS_BRANCH} .
+  docker build --cache-from ${SERVICE_NAME}:latest -t ${SERVICE_NAME}:${IMAGE_TAG} -t ${SERVICE_NAME}:${TRAVIS_BRANCH} .
 
   echo "Applying Tag and Pushing $IMAGE_TAG to ECR..."
   docker tag ${SERVICE_NAME}:${IMAGE_TAG} ${AMAZON_ECR_URI}/${SERVICE_NAME}:${IMAGE_TAG}
