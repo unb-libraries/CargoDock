@@ -17,8 +17,8 @@ curl -O https://raw.githubusercontent.com/drupal-composer/drupal-project/8.x/scr
 mv ScriptHandler.php scripts/composer/
 
 # Build instance.
-echo "Building - 'composer install --prefer-dist --verbose -vvv --profile --no-interaction --${DRUPAL_COMPOSER_DEV}'"
-composer install --prefer-dist --verbose -vvv --profile --no-interaction --${DRUPAL_COMPOSER_DEV}
+echo "Building - 'composer install --prefer-dist --no-interaction --${DRUPAL_COMPOSER_DEV}'"
+composer install --prefer-dist --no-interaction --${DRUPAL_COMPOSER_DEV}
 
 # Install Drush globally.
 rm -f /usr/bin/drush
