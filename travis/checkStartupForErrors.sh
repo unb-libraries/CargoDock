@@ -5,7 +5,7 @@
 STARTUP_LOG=$(docker-compose logs "$SERVICE_NAME")
 
 # Echo the log for travis.
-echo $STARTUP_LOG
+echo "$STARTUP_LOG"
 
 # If error strings found in startup, exit.
 LOWER_STARTUP_LOG=${STARTUP_LOG,,}
