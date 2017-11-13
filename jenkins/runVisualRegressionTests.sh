@@ -14,9 +14,11 @@ if [ -f ./tests/backstop/$BRANCH/backstop.json ]; then
   DEV_IP=$(kubectl exec $POD_NAME --namespace=$BRANCH curl ipinfo.io/ip)
   
   # Let drupal warm up. Avoid cache deadlock errors.
+  echo "Warming up drupal..."
   docker run --rm --shm-size 512m --add-host dev-$SERVICE_NAME:$DEV_IP -v $(pwd)/tests/backstop/$BRANCH:/src docksal/backstopjs test &> /dev/null
 
   # Actually run tests.
+  echo "Actually testing!"
   docker run --rm --shm-size 512m --add-host dev-$SERVICE_NAME:$DEV_IP -v $(pwd)/tests/backstop/$BRANCH:/src docksal/backstopjs test
 
   TEST_RETURN_CODE=$?
