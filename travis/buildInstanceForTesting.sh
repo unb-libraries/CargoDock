@@ -12,4 +12,9 @@ else
   docker build --build-arg COMPOSER_DEPLOY_DEV=dev -t ${SERVICE_NAME}:latest .
 fi
 
-docker-compose up -d
+if [ "$DEBUG_CONTAINER_START" == "TRUE" ]; then
+  echo "Starting container, debug mode activated - Testing WILL FAIL"
+  docker-compose up
+else
+  docker-compose up -d
+fi
