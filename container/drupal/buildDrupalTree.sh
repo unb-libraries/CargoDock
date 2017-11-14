@@ -38,6 +38,7 @@ cp -r ${DRUPAL_BUILD_TMPROOT}/core/profiles/standard/config ${DRUPAL_BUILD_TMPRO
 # Importing config with shortcut_set is a nightmare. See https://www.drupal.org/node/2583113
 if [ "$DRUPAL_INSTALL_REMOVE_SHORTCUT" == "TRUE" ]; then
   sed -i -e '/^  - shortcut$/d' ${DRUPAL_BUILD_TMPROOT}/core/profiles/standard/standard.info.yml
+  sed -i -e '/^  - shortcut$/d' ${DRUPAL_BUILD_TMPROOT}/profiles/${DRUPAL_SITE_ID}/${DRUPAL_SITE_ID}.info.yml
 fi
 
 # Move settings files into build location.
