@@ -35,12 +35,6 @@ mv ${TMP_DRUPAL_BUILD_DIR}/${DRUPAL_SITE_ID} ${DRUPAL_BUILD_TMPROOT}/profiles/
 # Copy config from standard install profile for current version of Drupal.
 cp -r ${DRUPAL_BUILD_TMPROOT}/core/profiles/standard/config ${DRUPAL_BUILD_TMPROOT}/profiles/${DRUPAL_SITE_ID}/
 
-# Importing config with shortcut_set is a nightmare. See https://www.drupal.org/node/2583113
-if [ "$DRUPAL_INSTALL_REMOVE_SHORTCUT" == "TRUE" ]; then
-  sed -i -e '/^  - shortcut$/d' ${DRUPAL_BUILD_TMPROOT}/core/profiles/standard/standard.info.yml
-  sed -i -e '/^  - shortcut$/d' ${DRUPAL_BUILD_TMPROOT}/profiles/${DRUPAL_SITE_ID}/${DRUPAL_SITE_ID}.info.yml
-fi
-
 # Move settings files into build location.
 mkdir -p ${DRUPAL_BUILD_TMPROOT}/sites/all
 mv ${TMP_DRUPAL_BUILD_DIR}/settings ${DRUPAL_BUILD_TMPROOT}/sites/all/
