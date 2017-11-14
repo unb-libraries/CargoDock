@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # Wait until kube deployment logs show the finished marker.
-MAX_FINISHED_RETRIES=5
+MAX_FINISHED_RETRIES=10
 FINISHED_RETRY_INTERVAL=15
 
 KUBE_DEPLOYMENT_NAME=$(echo $SERVICE_NAME | sed 's/\./-/g')
