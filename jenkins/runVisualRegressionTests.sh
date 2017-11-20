@@ -11,15 +11,21 @@ if [ -f ./tests/backstop/$BRANCH/backstop.json ]; then
 
   KUBE_DEPLOYMENT_NAME=$(echo $SERVICE_NAME | sed 's/\./-/g')
   POD_NAME=$(kubectl get pods --namespace=$BRANCH --sort-by=.status.startTime -l tier=$KUBE_DEPLOYMENT_NAME --no-headers | tac | awk '{ print $1 }' | head -n 1)
-  DEV_IP=$(kubectl exec $POD_NAME --namespace=$BRANCH curl ipinfo.io/ip)
-  
+  HOST_IP=$(kubectl exec $POD_NAME --namespace=$BRANCH curl ipinfo.io/ip)
+
+  if [ "$BRANCH" == "prod" ]; then
+    TEST_HOSTNAME="$SERVICE_NAME"
+  else
+    TEST_HOSTNAME="$BRANCH-$SERVICE_NAME"
+  fi
+
   # Let drupal warm up. Avoid cache deadlock errors.
   echo "Warming up drupal..."
-  docker run --rm --shm-size 512m --add-host dev-$SERVICE_NAME:$DEV_IP -v $(pwd)/tests/backstop/$BRANCH:/src docksal/backstopjs test &> /dev/null || true
+  docker run --rm --shm-size 512m --add-host $TEST_HOSTNAME:$HOST_IP -v $(pwd)/tests/backstop/$BRANCH:/src docksal/backstopjs test &> /dev/null || true
 
   # Actually run tests.
   echo "Actually testing!"
-  docker run --rm --shm-size 512m --add-host dev-$SERVICE_NAME:$DEV_IP -v $(pwd)/tests/backstop/$BRANCH:/src docksal/backstopjs test
+  docker run --rm --shm-size 512m --add-host $TEST_HOSTNAME:$HOST_IP -v $(pwd)/tests/backstop/$BRANCH:/src docksal/backstopjs test
 
   TEST_RETURN_CODE=$?
   if [ $TEST_RETURN_CODE != 0 ]; then
