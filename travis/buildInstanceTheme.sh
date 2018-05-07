@@ -14,7 +14,7 @@ if [[ $DEPLOY_BRANCHES =~ (^|,)"$TRAVIS_BRANCH"(,|$) ]]; then
     if [ -e vendor/bin/dockworker ]; then
       # Build the theme(s).
       echo "Building theme using dockworker."
-      vendor/bin/dockworker container:theme:build-all
+      vendor/bin/dockworker application:theme:build-all
     fi
   fi
 else
