@@ -5,8 +5,6 @@
 set -e
 
 if [[ $DEPLOY_BRANCHES =~ (^|,)"$TRAVIS_BRANCH"(,|$) ]]; then
-  # https://github.com/aws/aws-cli/issues/1522
-  export PYTHONWARNINGS="ignore:Unverified HTTPS request"
   pip install --user awscli
   export PATH=$PATH:$HOME/.local/bin
   eval $(aws ecr get-login --no-include-email --region $AMAZON_ECR_REGION)
