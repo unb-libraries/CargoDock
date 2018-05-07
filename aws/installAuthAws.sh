@@ -5,7 +5,8 @@
 set -e
 
 if [[ $DEPLOY_BRANCHES =~ (^|,)"$TRAVIS_BRANCH"(,|$) ]]; then
-  pip install --trusted-host pypi.org --trusted-host files.pythonhosted.org --user awscli
+  export PYTHONWARNINGS="ignore:Unverified HTTPS request"
+  pip install --user awscli
   export PATH=$PATH:$HOME/.local/bin
   eval $(aws ecr get-login --no-include-email --region $AMAZON_ECR_REGION)
 fi
