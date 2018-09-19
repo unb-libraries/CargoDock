@@ -5,7 +5,7 @@ MAX_FINISHED_RETRIES=10
 FINISHED_RETRY_INTERVAL=15
 
 KUBE_DEPLOYMENT_NAME=$(echo $SERVICE_NAME | sed 's/\./-/g')
-POD_NAME=$(kubectl get pods --namespace=$BRANCH --sort-by=.status.startTime -l uri=$SERVICE_NAME --no-headers | tac | awk '{ print $1 }' | head -n 1)
+POD_NAME=$(kubectl get pods --namespace=$BRANCH --sort-by=.status.startTime -l instance=$SERVICE_NAME --no-headers | tac | awk '{ print $1 }' | head -n 1)
 
 echo "Checking for pod finished marker in $POD_NAME..."
 FINISHED_RETRY_COUNT=0

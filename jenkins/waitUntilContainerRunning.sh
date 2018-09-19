@@ -7,7 +7,7 @@ CONNECT_RETRY_INTERVAL=15
 KUBE_DEPLOYMENT_NAME=$(echo $SERVICE_NAME | sed 's/\./-/g')
 
 CONNECT_RETRY_COUNT=0
-POD_NAME=$(kubectl get pods --namespace=$BRANCH --sort-by=.status.startTime -l uri=$SERVICE_NAME --no-headers | tac | awk '{ print $1 }' | head -n 1)
+POD_NAME=$(kubectl get pods --namespace=$BRANCH --sort-by=.status.startTime -l instance=$SERVICE_NAME --no-headers | tac | awk '{ print $1 }' | head -n 1)
 
 echo "Checking if pod $POD_NAME is running..."
 until [ ${CONNECT_RETRY_COUNT} -ge ${MAX_CONNECT_RETRIES} ]; do
