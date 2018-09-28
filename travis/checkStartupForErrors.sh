@@ -13,7 +13,7 @@ if [[ $LOWER_STARTUP_LOG == *"error"* ]]; then
   echo "$STARTUP_LOG"
   
   # Allow the stdout buffer more time to be written to output
-  sleep 10
+  sleep 20
   exit 1
 fi
 
