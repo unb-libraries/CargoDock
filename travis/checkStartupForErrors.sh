@@ -17,4 +17,5 @@ if [[ $LOWER_STARTUP_LOG == *"error"* ]]; then
   exit 1
 fi
 
-echo "$STARTUP_LOG"
+# echo "$STARTUP_LOG"
+echo "Startup log omitted due to Travis bug..."
