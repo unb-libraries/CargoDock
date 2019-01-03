@@ -2,8 +2,6 @@
 #
 # Build the docker images from the lean instance repository and push the built
 # images to the registry.
-set -e
-
 if [[ $DEPLOY_BRANCHES =~ (^|,)"$TRAVIS_BRANCH"(,|$) ]]; then
   AMAZON_ECR_URI="${AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com"
   SERVICE_NAME_SLUG=${SERVICE_NAME//./}
