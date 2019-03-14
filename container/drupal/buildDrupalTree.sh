@@ -4,6 +4,11 @@ set -e
 # Dev/NoDev
 DRUPAL_COMPOSER_DEV="${1:-no-dev}"
 
+# Speed up local builds.
+if [ "$DEPLOY_ENV" == "local" ]; then
+  composer global require hirak/prestissimo
+fi
+
 # Copy build files into a temporary build location.
 mkdir ${DRUPAL_BUILD_TMPROOT}
 cp ${TMP_DRUPAL_BUILD_DIR}/composer.json ${DRUPAL_BUILD_TMPROOT}
