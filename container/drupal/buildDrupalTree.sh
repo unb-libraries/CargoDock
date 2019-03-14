@@ -5,7 +5,7 @@ set -e
 DRUPAL_COMPOSER_DEV="${1:-no-dev}"
 
 # Speed up local builds.
-if [ "$DEPLOY_ENV" == "local" ]; then
+if [ "$DRUPAL_COMPOSER_DEV" == "dev" ]; then
   composer global require hirak/prestissimo
 fi
 
