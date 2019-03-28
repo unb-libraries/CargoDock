@@ -5,7 +5,7 @@ RUN apk update && apk add \
   graphviz \
   ttf-ubuntu-font-family
 
-ADD ./app /app
+ADD ./doxygen /app
 ADD ./tree /app/html
 
 WORKDIR /app

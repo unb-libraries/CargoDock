@@ -1,17 +1,16 @@
 #!/usr/bin/env bash
 if [[ $DEPLOY_BRANCHES =~ (^|,)"$TRAVIS_BRANCH"(,|$) ]] && [[ "$DOCKER_BUILD_DOCS" != "FALSE" ]]; then
-  cd CargoDock/travis/docs
-
-  # Replace tokenized files
-  sed -i "s|SERVICE_NAME|$SERVICE_NAME|g" ./doxygen/config.doxy
-
   # Copy files from built container.
-  docker cp "${SERVICE_NAME}:/app/html" ./tree
+  docker cp "${SERVICE_NAME}:/app/html" ./CargoDock/travis/docs/tree
 
   # Remove Composer Deps
-  rm -rf ./tree/vendor ./tree/core/assets/vendor
+  rm -rf ./CargoDock/travis/docs/tree/vendor ./CargoDock/travis/docs/tree/core/assets/vendor
+
+  # Replace tokenized files
+  sed -i "s|SERVICE_NAME|$SERVICE_NAME|g" ./CargoDock/travis/docs/doxygen/config.doxy
 
   # Build Docs into ./docs
+  cd ./CargoDock/travis/docs
   docker-compose build --no-cache
 
   echo "Building docs..."
