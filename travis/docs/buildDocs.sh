@@ -24,7 +24,7 @@ if [[ $DEPLOY_BRANCHES =~ (^|,)"$TRAVIS_BRANCH"(,|$) ]] && [[ "$DOCKER_BUILD_DOC
   docker build -t ${DOCKER_HUB_IMAGE} .
 
   echo "Pushing to dockerhub [$DOCKER_HUB_IMAGE]..."
-  docker login -u ${DOCKER_HUB_USERNAME} -p ${DOCKER_HUB_PASSWORD
+  docker login -u ${DOCKER_HUB_USERNAME} -p ${DOCKER_HUB_PASSWORD}
   docker push ${DOCKER_HUB_IMAGE}
 else
   echo "Docs not built for [$TRAVIS_BRANCH]. Deployable branches : $DEPLOY_BRANCHES"
