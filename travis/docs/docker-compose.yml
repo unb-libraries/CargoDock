@@ -1,0 +1,8 @@
+version: '3.6'
+
+services:
+  doxygen-build:
+    build:
+      context: .
+    volumes:
+      - ./docs:/app/docs
