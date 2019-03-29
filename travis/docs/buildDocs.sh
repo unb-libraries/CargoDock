@@ -14,7 +14,7 @@ if [[ $DEPLOY_BRANCHES =~ (^|,)"$TRAVIS_BRANCH"(,|$) ]] && [[ "$DOCKER_BUILD_DOC
   docker-compose build --no-cache
 
   echo "Building docs..."
-  travis_wait docker-compose run doxygen-build
+  docker-compose run doxygen-build
 
   # Build doxygen docs into tree.
   echo "Building Docs nginx container..."
