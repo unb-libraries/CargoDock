@@ -20,6 +20,7 @@ if [[ $DEPLOY_BRANCHES =~ (^|,)"$TRAVIS_BRANCH"(,|$) ]] && [[ "$DOCKER_BUILD_DOC
   echo "Building Docs nginx container..."
   cd nginx
   DOCKER_HUB_IMAGE="unb-libraries/${SERVICE_NAME}_docs:latest"
+  mv ../docs .
   docker build -t ${DOCKER_HUB_IMAGE} .
 
   echo "Pushing to dockerhub [$DOCKER_HUB_IMAGE]..."
