@@ -19,7 +19,7 @@ if [[ $DEPLOY_BRANCHES =~ (^|,)"$TRAVIS_BRANCH"(,|$) ]] && [[ "$DOCKER_BUILD_DOC
   # Build doxygen docs into tree.
   echo "Building Docs nginx container..."
   cd nginx
-  DOCKER_HUB_IMAGE="unb-libraries/${SERVICE_NAME}_docs:latest"
+  DOCKER_HUB_IMAGE="unblibraries/${SERVICE_NAME}_docs:latest"
   cp -r ../docs .
   docker build -t ${DOCKER_HUB_IMAGE} .
 
