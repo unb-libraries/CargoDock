@@ -6,7 +6,7 @@ RUN apk update && apk add \
   ttf-ubuntu-font-family
 
 ADD ./doxygen /app
-ADD ./tree /app/html
+ADD ./tree/html /app/html
 
 WORKDIR /app
 
