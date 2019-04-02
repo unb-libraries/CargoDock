@@ -20,14 +20,6 @@ mv ScriptHandler.php scripts/composer/
 echo "Building - 'composer install --no-suggest --prefer-dist --no-interaction --${DRUPAL_COMPOSER_DEV}'"
 composer install --no-suggest --prefer-dist --no-interaction --${DRUPAL_COMPOSER_DEV}
 
-# Install Drush globally.
-rm -f /usr/bin/drush
-ln -s ${DRUPAL_BUILD_TMPROOT}/vendor/bin/drush /usr/bin/drush
-
-# Make drupal console available.
-rm -f /usr/bin/drupal
-ln -s ${DRUPAL_BUILD_TMPROOT}/vendor/bin/drupal /usr/bin/drupal
-
 # Move profile from repo to build root.
 cd ${DRUPAL_BUILD_TMPROOT}
 mv ${TMP_DRUPAL_BUILD_DIR}/${DRUPAL_SITE_ID} ${DRUPAL_BUILD_TMPROOT}/profiles/
