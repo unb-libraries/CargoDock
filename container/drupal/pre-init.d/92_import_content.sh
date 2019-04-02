@@ -14,7 +14,7 @@ then
 
   # Install Drush 8, which allows downloading and installing module dependencies automatically.
   composer require drush/drush:${DRUSH_VERSION} --prefer-dist
-  DRUSH_COMMAND="${CONTENT_DEPLOY_DIR}/content/vendor/bin/drush --root=${DRUPAL_ROOT} --uri=default --yes"
+  DRUSH_8_COMMAND="${CONTENT_DEPLOY_DIR}/content/vendor/bin/drush --root=${DRUPAL_ROOT} --uri=default --yes"
 
   # Disable site-local drush so 8.x can run.
   if [[ -d "${DRUPAL_ROOT}/vendor/drush" ]];
@@ -27,8 +27,8 @@ then
     if [ "$MODULE_DIR" != "vendor/" ]; then
       MODULE=$(echo ${MODULE_DIR%/})
       cp -r ${CONTENT_DEPLOY_DIR}/content/${MODULE} ${DRUPAL_ROOT}/modules/custom/
-      ${DRUSH_COMMAND} en ${MODULE}
-      ${DRUSH_COMMAND} pmu ${MODULE}
+      ${DRUSH_8_COMMAND} en ${MODULE}
+      ${DRUSH_8_COMMAND} pmu ${MODULE}
       rm -rf "${DRUPAL_ROOT}/modules/custom/${MODULE}"
     fi
   done
