@@ -17,8 +17,9 @@ curl -O https://raw.githubusercontent.com/drupal-composer/drupal-project/8.x/scr
 mv ScriptHandler.php scripts/composer/
 
 # Build instance.
-echo "Building - 'composer install --no-suggest --prefer-dist --no-interaction --${DRUPAL_COMPOSER_DEV}'"
-composer install --no-suggest --prefer-dist --no-interaction --${DRUPAL_COMPOSER_DEV}
+BUILD_COMMAND="composer install --no-suggest --prefer-dist --no-interaction --${DRUPAL_COMPOSER_DEV}"
+echo "Building Drupal [${BUILD_COMMAND}]"
+${BUILD_COMMAND}
 
 # Move profile from repo to build root.
 cd ${DRUPAL_BUILD_TMPROOT}
