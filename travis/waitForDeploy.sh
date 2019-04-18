@@ -23,7 +23,7 @@ done
 if [ ${CONNECT_RETRY_COUNT} -ge ${MAX_CONNECT_RETRIES} ]; then
   # Echo logs for failure.
   docker-compose logs
-  
+
   # Report failure.
   echo "Connecting to ${SERVICE_NAME} failed after ${MAX_CONNECT_RETRIES} attempts!"
   exit 1
