@@ -9,7 +9,7 @@ echo "IMAGE_TAG $IMAGE_TAG"
 # Determine time to pause.
 KUBE_DEPLOYMENT_NAME=$(echo $SERVICE_NAME | sed 's/\./-/g')
 SERVICE_MINREADY_SECONDS=$(kubectl get deployment $KUBE_DEPLOYMENT_NAME -o json --namespace=dev | grep minReadySeconds | awk {'print $2'} | sed 's|,||g')
-SLEEP_SECONDS=${SERVICE_MINREADY_SECONDS-30}
+SLEEP_SECONDS=${SERVICE_MINREADY_SECONDS:-30}
 
 # Sleep.
 echo "Sleeping for ${SLEEP_SECONDS}s to allow pod to come up..."
