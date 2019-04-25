@@ -21,9 +21,10 @@ if [ "$DRUPAL_COMPOSER_DEV" == "dev" ]; then
   sed -i "s|cache: true|cache: false|g" ${DRUPAL_BUILD_TMPROOT}/sites/default/services.yml
 fi
 
-# Blackfire.
+# Blackfire/NoBlackfire.
+INSTALL_BLACKFIRE_PROBE="${2:-FALSE}"
+
 echo "INSTALL_BLACKFIRE_PROBE = $INSTALL_BLACKFIRE_PROBE"
-# Install Blackfire probe.
 if [ "$INSTALL_BLACKFIRE_PROBE" == "TRUE" ]; then
   echo "Installing Blackfire Probe..."
   /scripts/installBlackfire.sh
