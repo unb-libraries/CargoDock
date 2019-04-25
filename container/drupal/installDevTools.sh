@@ -27,5 +27,8 @@ INSTALL_BLACKFIRE_PROBE="${2:-FALSE}"
 echo "INSTALL_BLACKFIRE_PROBE = $INSTALL_BLACKFIRE_PROBE"
 if [ "$INSTALL_BLACKFIRE_PROBE" == "TRUE" ]; then
   echo "Installing Blackfire Probe..."
-  /scripts/installBlackfire.sh
+  /scripts/installBlackfireProbe.sh
+
+  echo "Installing Blackfire CLI..."
+  /scripts/installBlackfireCli.sh
 fi
