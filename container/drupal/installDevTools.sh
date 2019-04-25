@@ -4,8 +4,10 @@
 DRUPAL_COMPOSER_DEV="${1:-no-dev}"
 
 # Dev Addons.
+echo "DRUPAL_COMPOSER_DEV = $DRUPAL_COMPOSER_DEV"
 if [ "$DRUPAL_COMPOSER_DEV" == "dev" ]; then
-  ## Testing Tools
+  echo "Installing Dev Tools..."
+
   # Behat.
   cd ${DRUPAL_TESTING_ROOT}/behat
   rm -rf vendor composer.lock
@@ -19,8 +21,10 @@ if [ "$DRUPAL_COMPOSER_DEV" == "dev" ]; then
   sed -i "s|cache: true|cache: false|g" ${DRUPAL_BUILD_TMPROOT}/sites/default/services.yml
 fi
 
+# Blackfire.
+echo "INSTALL_BLACKFIRE_PROBE = $INSTALL_BLACKFIRE_PROBE"
 # Install Blackfire probe.
-INSTALL_BLACKFIRE_PROBE="${1:-FALSE}"
-if [[ "$INSTALL_BLACKFIRE_PROBE" == "TRUE" ]]; then
+if [ "$INSTALL_BLACKFIRE_PROBE" == "TRUE" ]; then
+  echo "Installing Blackfire Probe..."
   /scripts/installBlackfire.sh
 fi
