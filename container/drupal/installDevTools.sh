@@ -8,11 +8,6 @@ echo "DRUPAL_COMPOSER_DEV = $DRUPAL_COMPOSER_DEV"
 if [ "$DRUPAL_COMPOSER_DEV" == "dev" ]; then
   echo "Installing Dev Tools..."
 
-  # Behat.
-  cd ${DRUPAL_TESTING_ROOT}/behat
-  rm -rf vendor composer.lock
-  composer install --no-suggest --no-interaction --prefer-dist
-
   # Copy default services
   cp ${DRUPAL_BUILD_TMPROOT}/sites/default/default.services.yml ${DRUPAL_BUILD_TMPROOT}/sites/default/services.yml
 
