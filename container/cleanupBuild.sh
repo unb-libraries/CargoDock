@@ -7,7 +7,10 @@ if [ "$DRUPAL_COMPOSER_DEV" != "dev" ]; then
   rm -rf $DRUPAL_TESTING_ROOT
 fi
 
-# Clear composer cache
+# Clear composer cache.
 if [ "$COMPOSER_CLEAR_CACHE" != "FALSE" ]; then
   composer clear-cache
 fi
+
+# Remove source package conf.
+rm -rf /package-conf
