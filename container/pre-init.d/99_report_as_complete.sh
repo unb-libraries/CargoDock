@@ -1,2 +1,2 @@
 #!/usr/bin/env sh
-cat /scripts/complete.txt
+cat /scripts/data/complete.txt
