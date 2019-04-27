@@ -16,7 +16,7 @@ echo "Updating Drupal [${BUILD_COMMAND}]"
 ${BUILD_COMMAND}
 
 # Remove upstream profile
-${DRUPAL_BUILD_TMPROOT}/profiles/defaultd
+rm -rf ${DRUPAL_BUILD_TMPROOT}/profiles/defaultd
 
 # Create the profile folder.
 mkdir -p "${DRUPAL_BUILD_TMPROOT}/profiles/${DRUPAL_SITE_ID}"
