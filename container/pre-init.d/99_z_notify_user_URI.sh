@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 if [[ -n "$LOCAL_HOSTNAME" ]] && [[ -n "$LOCAL_PORT" ]]; then
-  printf "\n\nVisit your instance at:"
+  printf "\nVisit your instance at:"
   printf "\nhttp://$LOCAL_HOSTNAME"
 
   printf "\n\nLog-in to your instance via:\n"
