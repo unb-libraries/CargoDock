@@ -27,7 +27,7 @@ rsync -a "${DRUPAL_BUILD_TMPROOT}/core/profiles/${DRUPAL_BASE_PROFILE}/config" "
 # Copy additional configs provided by dockworker
 ADDITIONAL_CONFIG_DIR="/scripts/data/profiles/${DRUPAL_BASE_PROFILE}/config"
 if [[ -d "$ADDITIONAL_CONFIG_DIR" ]]; then
-  rsync -a ${ADDITIONAL_CONFIG_DIR}/config ${DRUPAL_BUILD_TMPROOT}/profiles/${DRUPAL_SITE_ID}/
+  rsync -a ${ADDITIONAL_CONFIG_DIR} ${DRUPAL_BUILD_TMPROOT}/profiles/${DRUPAL_SITE_ID}/
 fi
 
 # Move local profile from repo to build root, overwriting.
