@@ -8,7 +8,7 @@ mv /package-conf/php/app-php.ini /etc/php7/conf.d/zz_app.ini
 mv /package-conf/php/app-php-fpm.conf /etc/php7/php-fpm.d/zz_app.conf
 
 # postfix
-mv /package-conf/postfix/main.cf /etc/postfix/main.cf
+cat /package-conf/postfix/main.cf >> /etc/postfix/main.cf
 
 # logzio
 mkdir -p /etc/rsyslog.d
