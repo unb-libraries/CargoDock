@@ -7,7 +7,7 @@ if [[ -n "$LOCAL_HOSTNAME" ]] && [[ -n "$LOCAL_PORT" ]]; then
   /scripts/drupalUli.sh
   if nslookup mailhog &> /dev/null; then
     MAILHOG_PORT=$((LOCAL_PORT+1000))
-    printf "\n\nView sent mail at:"
-    printf "\nhttp://$LOCAL_HOSTNAME:$MAILHOG_PORT"
+    printf "\nView sent mail at:\n"
+    echo "http://$LOCAL_HOSTNAME:$MAILHOG_PORT"
   fi
 fi
