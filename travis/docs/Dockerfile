@@ -7,7 +7,7 @@ RUN apk update && apk add \
   rm -rf /app/html
 
 ADD ./doxygen /app
-ADD ./tree /app/html
+ADD ./tree/ /app/html/
 
 WORKDIR /app
 
