@@ -2,6 +2,7 @@
 set -e
 
 # Run container tests.
+docker ps
 docker exec -i -t ${SERVICE_NAME} /scripts/runTests.sh
 
 # Test visual regression
