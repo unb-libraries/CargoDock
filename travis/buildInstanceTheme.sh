@@ -11,10 +11,9 @@ if [[ $DEPLOY_BRANCHES =~ (^|,)"$TRAVIS_BRANCH"(,|$) ]]; then
 
     # Install dependencies.
     composer install --no-suggest --prefer-dist --no-interaction
-    if [ -e vendor/bin/dockworker ]; then
-      # Build the theme(s).
+    if [[ -e vendor/bin/dockworker ]]; then
       echo "Building theme using dockworker."
-      vendor/bin/dockworker application:theme:build-all
+      vendor/bin/dockworker theme:build-all
     fi
   fi
 else
