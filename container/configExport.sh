@@ -3,5 +3,5 @@
 rm -rf ${DRUPAL_CONFIGURATION_DIR}/*
 
 # Write out config.
-${DRUSH} config-export --destination=${DRUPAL_CONFIGURATION_DIR}
+drush --root=${DRUPAL_ROOT} --uri=default --yes config-export --destination=${DRUPAL_CONFIGURATION_DIR}
 rm -rf ${DRUPAL_CONFIGURATION_DIR}/*devel*
