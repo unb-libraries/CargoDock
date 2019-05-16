@@ -18,9 +18,7 @@ echo "$POD_LOGS"
 LOWER_POD_LOGS=${POD_LOGS,,}
 
 # Exceptions
-EXCEPTIONS=("ERROR 1045")
-EXCEPTION_PATTERNS=$(echo ${args[@]}|tr " " "|")
-LOGS_EXCEPTIONS_REMOVED=$(echo "$LOWER_POD_LOGS" | grep -vEow "$EXCEPTION_PATTERNS")
+LOGS_EXCEPTIONS_REMOVED=$(echo "$LOWER_POD_LOGS" | grep -v 'ERROR 1045')
 
 if [[ $LOGS_EXCEPTIONS_REMOVED == *"error"* ]]; then
   echo "Error found in container startup."
