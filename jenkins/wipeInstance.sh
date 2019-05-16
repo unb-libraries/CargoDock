@@ -18,7 +18,7 @@ BRANCH=$2
 KUBE_DEPLOYMENT_NAME=$(echo $SERVICE_NAME | sed 's/\./-/g')
 CONNECT_RETRY_COUNT=0
 POD_NAME=$(kubectl get pods --namespace=$BRANCH --sort-by=.status.startTime -l instance=$SERVICE_NAME --no-headers | tac | awk '{ print $1 }' | head -n 1)
-KUBE_EXEC="kubectl exec -it "$POD_NAME" --namespace="$BRANCH" --"
+KUBE_EXEC="kubectl exec "$POD_NAME" --namespace="$BRANCH" --"
 SITE_ID=$($KUBE_EXEC sh -lc "echo \$DRUPAL_SITE_ID")
 
 echo "Wiping all data for $SERVICE_NAME:$BRANCH"
