@@ -14,17 +14,14 @@ echo "Pod logs:"
 POD_LOGS=$(kubectl logs $POD_NAME --namespace=$BRANCH)
 echo "$POD_LOGS"
 
-echo '-----'
 # If error strings found in startup, exit.
 LOWER_POD_LOGS=${POD_LOGS,,}
 
 # Exceptions
-LOGS_EXCEPTIONS_REMOVED=$(echo "$LOWER_POD_LOGS" | grep -v 'ERROR 1045')
-echo '*****'
+LOGS_EXCEPTIONS_REMOVED=$(echo "$LOWER_POD_LOGS" | grep -v 'error 1045')
 echo "$LOGS_EXCEPTIONS_REMOVED"
 
 if [[ $LOGS_EXCEPTIONS_REMOVED == *"error"* ]]; then
-  echo '######'
   echo "$LOGS_EXCEPTIONS_REMOVED"
   echo "Error found in container startup."
   exit 1
