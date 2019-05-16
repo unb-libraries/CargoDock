@@ -6,12 +6,14 @@ then
   echo "Service name not set!"
   exit 1
 fi
+SERVICE_NAME=$1
 
 if [[ -z "$2" ]]
 then
   echo "Branch name not set!"
   exit 1
 fi
+BRANCH=$2
 
 KUBE_DEPLOYMENT_NAME=$(echo $SERVICE_NAME | sed 's/\./-/g')
 CONNECT_RETRY_COUNT=0
