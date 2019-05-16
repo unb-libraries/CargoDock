@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 #
 # Destroy all persistent data in a deployment and re-install.
-if [[ -z "$WIPE_SERVICE_NAME" ]]
+if [[ -z "$1" ]]
 then
   echo "Service name not set!"
   exit 1
 fi
 
-if [[ -z "$WIPE_BRANCH" ]]
+if [[ -z "$2" ]]
 then
   echo "Branch name not set!"
   exit 1
