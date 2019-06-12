@@ -25,6 +25,13 @@ then
     fi
   done
 
+  # Restore system module state to that of before the import.
+  mkdir -p /tmp/content-import
+  cp ${DRUPAL_CONFIGURATION_DIR}/core.extension.yml /tmp/content-import/
+  ${DRUSH} cim --partial --source=/tmp/content-import/
+  rm -rf /tmp/content-import
+
+  # Remove migration modules from disk.
   cd ${DRUPAL_ROOT}
   composer remove unb-libraries/drupal-content-migrate --update-with-dependencies
 
