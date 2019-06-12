@@ -25,6 +25,9 @@ then
     fi
   done
 
+  # Disable migration modules.
+  ${DRUSH} pmu migrate migrate_plus migrate_tools
+
   # Restore system module state to that of before the import.
   mkdir -p /tmp/content-import
   cp ${DRUPAL_CONFIGURATION_DIR}/core.extension.yml /tmp/content-import/
