@@ -8,8 +8,10 @@ echo "DRUPAL_COMPOSER_DEV = $DRUPAL_COMPOSER_DEV"
 if [ "$DRUPAL_COMPOSER_DEV" == "dev" ]; then
   echo "Installing Dev Tools..."
 
-  # Copy default services
-  cp ${DRUPAL_BUILD_TMPROOT}/sites/default/default.services.yml ${DRUPAL_BUILD_TMPROOT}/sites/default/services.yml
+  # Copy default services if no services.yml has been provided
+  if [[ ! -f "${DRUPAL_BUILD_TMPROOT}/sites/default/services.yml" ]]; then
+    cp "${DRUPAL_BUILD_TMPROOT}/sites/default/default.services.yml" "${DRUPAL_BUILD_TMPROOT}/sites/default/services.yml"
+  fi
 
   # Twig settings
   sed -i "s|debug: false|debug: true|g" ${DRUPAL_BUILD_TMPROOT}/sites/default/services.yml

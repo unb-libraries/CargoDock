@@ -37,3 +37,8 @@ rsync -a ${RSYNC_FLAGS} --remove-source-files ${TMP_DRUPAL_BUILD_DIR}/${DRUPAL_S
 # Move settings files into build location.
 rm -rf ${DRUPAL_BUILD_TMPROOT}/sites/all/settings
 rsync -a ${RSYNC_FLAGS} --remove-source-files ${TMP_DRUPAL_BUILD_DIR}/settings ${DRUPAL_BUILD_TMPROOT}/sites/all/
+
+# If a custom services.yml is provided, copy it in
+if [[ -f "${TMP_DRUPAL_BUILD_DIR}/services.yml" ]]; then
+  mv "${TMP_DRUPAL_BUILD_DIR}/services.yml" "${DRUPAL_BUILD_TMPROOT}/sites/default/"
+fi
