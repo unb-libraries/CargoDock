@@ -38,7 +38,7 @@ rsync -a ${RSYNC_FLAGS} --remove-source-files ${TMP_DRUPAL_BUILD_DIR}/${DRUPAL_S
 rm -rf ${DRUPAL_BUILD_TMPROOT}/sites/all/settings
 rsync -a ${RSYNC_FLAGS} --remove-source-files ${TMP_DRUPAL_BUILD_DIR}/settings ${DRUPAL_BUILD_TMPROOT}/sites/all/
 
-# If custom service overrides are provided, copy them in
-if [[ -d "${TMP_DRUPAL_BUILD_DIR}/services" ]]; then
-  mv "${TMP_DRUPAL_BUILD_DIR}/services/*" "${DRUPAL_BUILD_TMPROOT}/sites/default/"
+# If a custom services.yml is provided, copy it in
+if [[ -f "${TMP_DRUPAL_BUILD_DIR}/services.yml" ]]; then
+  mv "${TMP_DRUPAL_BUILD_DIR}/services.yml" "${DRUPAL_BUILD_TMPROOT}/sites/default/"
 fi
