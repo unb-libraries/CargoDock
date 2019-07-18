@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 # nginx
-mv /package-conf/nginx/*.conf /etc/nginx/conf.d/
+mv /package-conf/nginx/* /etc/nginx/conf.d/
 
 # php
 mv /package-conf/php/app-php.ini /etc/php7/conf.d/zz_app.ini
