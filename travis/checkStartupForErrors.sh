@@ -6,7 +6,7 @@ STARTUP_LOG=$(docker-compose logs "$SERVICE_NAME")
 LOWER_STARTUP_LOG=${STARTUP_LOG,,}
 
 # If error strings found in startup, exit.
-if [[ $LOWER_STARTUP_LOG == *"error"* ]]; then
+if [[ $LOWER_STARTUP_LOG == *" error"* ]]; then
   # Bring down the hammer.
   echo "Error found in container startup."
   STARTUP_LOG=$(docker-compose logs)
