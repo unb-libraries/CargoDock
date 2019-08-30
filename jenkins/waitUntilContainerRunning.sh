@@ -2,7 +2,7 @@
 #
 # Wait until Kubernetes reports the rollout as successful.
 MAX_CONNECT_RETRIES=5
-CONNECT_RETRY_INTERVAL=15
+CONNECT_RETRY_INTERVAL=30
 
 KUBE_DEPLOYMENT_NAME=$(echo $SERVICE_NAME | sed 's/\./-/g')
 
@@ -25,3 +25,6 @@ if [ ${CONNECT_RETRY_COUNT} -ge ${MAX_CONNECT_RETRIES} ]; then
   echo "${KUBE_DEPLOYMENT_NAME} rollout did not reach succesful status after ${MAX_CONNECT_RETRIES} attempts!"
   exit 1
 fi
+
+echo "Jenkins sleeping for ${CONNECT_RETRY_INTERVAL}s to allow old replicas to terminate..."
+sleep $CONNECT_RETRY_INTERVAL;

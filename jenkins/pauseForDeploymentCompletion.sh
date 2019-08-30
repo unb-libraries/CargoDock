@@ -19,5 +19,5 @@ else
 fi
 
 # Sleep.
-echo "Sleeping for ${SLEEP_SECONDS}s to allow pod to come up..."
+echo "Jenkins sleeping for ${SLEEP_SECONDS}s to allow deployment to roll out..."
 sleep $SLEEP_SECONDS
