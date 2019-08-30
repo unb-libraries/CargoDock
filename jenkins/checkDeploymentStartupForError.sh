@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 #
-# Check the Kubernetes deployment log for errors.
+# Check the pod startup logs for error strings.
+# This does not avoid deploying broken pods, but catches errors when they are deployed.
+# Note : At this point we can assume the rollout from previous was successful, so all pods returned are current.
 set -e
 
 echo "BRANCH $BRANCH"
