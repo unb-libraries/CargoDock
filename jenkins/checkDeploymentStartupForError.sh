@@ -39,7 +39,7 @@ do
       case $line in
            *"config_importer is already importing"*)
                IGNORED_ERRORS="$IGNORED_ERRORS[#$IGNORED_ERROR_COUNTER] $line\n"
-               IGNORED_ERRORS="$IGNORED_ERRORS[#$IGNORED_ERROR_COUNTER] With multiple pods, warnings about config import lock misses should not be considered failures.\n"
+               IGNORED_ERRORS="$IGNORED_ERRORS[#$IGNORED_ERROR_COUNTER] REASON: With multiple pods, warnings about config import lock misses should not be considered failures.\n"
                IGNORED_ERROR_COUNTER=$((IGNORED_ERROR_COUNTER+1));;
            *)
                ERRORS="$ERRORS[#$ERROR_COUNTER] $line\n"
