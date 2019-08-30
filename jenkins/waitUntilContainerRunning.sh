@@ -8,7 +8,7 @@ KUBE_DEPLOYMENT_NAME=$(echo $SERVICE_NAME | sed 's/\./-/g')
 
 CONNECT_RETRY_COUNT=0
 
-echo "Checking rollout status of deployment..."
+echo "Checking status of deployment rollout..."
 until [ ${CONNECT_RETRY_COUNT} -ge ${MAX_CONNECT_RETRIES} ]; do
   ROLLOUT_STATUS=$(kubectl rollout status deployment $KUBE_DEPLOYMENT_NAME -n $BRANCH)
   if [[ "$ROLLOUT_STATUS" == *"successfully rolled out"* ]]; then

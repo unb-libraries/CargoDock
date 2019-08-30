@@ -9,7 +9,7 @@ echo "BRANCH $BRANCH"
 echo "IMAGE_TAG $IMAGE_TAG"
 
 KUBE_DEPLOYMENT_NAME=$(echo $SERVICE_NAME | sed 's/\./-/g')
-POD_NAMES=$(kubectl get pods --namespace=$BRANCH --sort-by=.status.startTime -l instance=$SERVICE_NAME --no-headers | tac | awk '{ print $1 }')
+POD_NAMES=$(kubectl get pods --namespace=$BRANCH --sort-by=.status.startTime -l instance=$SERVICE_NAME --no-headers | grep 'Running' | tac | awk '{ print $1 }')
 POD_COUNTER=0
 
 # Loop over all this deployment's pods.
