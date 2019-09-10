@@ -37,6 +37,10 @@ do
   do
     if [[ $line == *"error"* ]]; then
       case $line in
+           *"access denied for user 'root'"*)
+               IGNORED_ERRORS="$IGNORED_ERRORS[#$IGNORED_ERROR_COUNTER] $line\n"
+               IGNORED_ERRORS="$IGNORED_ERRORS[#$IGNORED_ERROR_COUNTER] REASON: Initial MySQL status query is expected to fail.\n"
+               IGNORED_ERROR_COUNTER=$((IGNORED_ERROR_COUNTER+1));;
            *"config_importer is already importing"*)
                IGNORED_ERRORS="$IGNORED_ERRORS[#$IGNORED_ERROR_COUNTER] $line\n"
                IGNORED_ERRORS="$IGNORED_ERRORS[#$IGNORED_ERROR_COUNTER] REASON: With multiple pods, warnings about config import lock misses should not be considered failures.\n"
