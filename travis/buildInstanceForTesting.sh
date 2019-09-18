@@ -5,7 +5,7 @@ set -e
 echo "Building instance for testing..."
 
 # Caching this step from upstream was causing problems with old CargoDock.
-docker build --build-arg -t ${SERVICE_NAME}:latest .
+docker build -t ${SERVICE_NAME}:latest .
 
 if [[ "$DEBUG_CONTAINER_START" == "TRUE" ]]; then
   echo "Starting container, debug mode activated - Testing WILL FAIL"
