@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Wait until localhost:80 answers request.
+# Wait until application answers request.
 set -euo pipefail
 
 # Test the connection
